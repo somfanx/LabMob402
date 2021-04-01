@@ -17,5 +17,7 @@ app.use(express.static('assets'));
 
 
 
-app.listen(process.env.PORT || '3002');
-
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log("Way to go server at port " + port);
+});
