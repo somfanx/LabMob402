@@ -13,9 +13,7 @@ app.set('view engine', 'handlebars');
 app.get('/', function(req, res){
     res.render('index');
 });
-app.use(express.static('assets'));
-
-
+app.use(express.static('public'));
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
