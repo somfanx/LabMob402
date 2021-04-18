@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div class="aside">
+        <div class="headerAside">
+            <a href="/home/{{id}}" class="textInfo">< BACK</a>
+        </div>
+
+        <div class="bodyAside">
+
+        </div>
+    </div>
+
+    <div class="article">
+        <div class="changeInfoForm">
+            <div class="photo">
+                <img class="imgInfo" src="{{avatar}}" width="200px" height="200px">
+                <div class="btnPosition">
+                    <button class="btnChangeImage">Đổi ảnh đại diện</button>
+                </div>
+            </div>
+
+            <form class="inputForm" method="post" action="update">
+                <div class="input">
+                    <span class="textInput">ID</span>
+                    <input name="idUser"type="text" class="inputInfo" style="margin-left: 99px" value="{{id}}" readonly>
+                </div>
+                <div class="input">
+                    <span class="textInput">Email</span>
+                    <input name="email" type="text" class="inputInfo" placeholder="email" style="margin-left: 71px" value="{{email}}">
+                </div>
+                <div class="input">
+                    <span class="textInput">Mật khẩu</span>
+                    <input name ="password" type="text" class="inputInfo" placeholder="password" style="margin-left: 45px" value="{{password}}">
+                </div>
+                <div class="input">
+                    <span class="textInput">Tên</span>
+                    <input name="name" type="text" class="inputInfo" placeholder="first name" style="margin-left: 85px" value="{{name}}">
+                </div>
+                <div class="input">
+                    <span class="textInput">Tuổi</span>
+                    <input name="age" type="number" class="inputInfo" placeholder="age"  style="margin-left: 83px" value="{{age}}">
+                </div>
+                <div class="input">
+                    <span class="textInput">Địa chỉ</span>
+                    <input name="address" type="text" class="inputInfo" placeholder="address" style="margin-left: 63px" value="{{address}}">
+                </div>
+                <div class="input">
+                    <span class="textInput">Số điện thoại</span>
+                    <input name="phone" type="number" class="inputInfo" placeholder="phone number" style="margin-left: 14px" value="{{phone}}" >
+                </div>
+
+                <div class="input">
+                    <span class="textInput">Giới thiệu</span>
+                    <input name="description" type="text" class="inputInfo" placeholder="description" style="margin-left: 39px" value="{{description}}">
+
+                </div>
+
+                <div style="text-align: center">
+                    <button class="btnSave" type="submit">
+                        Lưu thông tin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<style>
+    body {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 100%;
+        margin: auto;
+    }
+
+    /*Aside*/
+    .aside {
+
+        width: 318px;
+        height: 1110px;
+        border: 1px solid #dbdbdb;
+        float: left;
+    }
+
+    .headerAside {
+        height: 79px;
+        background: linear-gradient(262deg, #ff7854, #fd267d);
+    }
+
+    .textInfo {
+        font-size: 25px;
+        font-weight: bold;
+        font-family: Arial;
+        color: white;
+        margin-left: 5%;
+        position: relative;
+        top: 35px;
+        text-decoration: none;
+    }
+
+    /*Notify*/
+    .textInforBody {
+        font-size: 20px;
+        font-weight: bold;
+        font-family: Arial;
+        margin-left: 10px;
+    }
+
+    .inforDetail {
+        margin-top: 5px;
+    }
+
+    .button {
+        height: 40px;
+        width: 380px;
+        border: none;
+        background-color: #dbdbdb;
+        font-weight: bold;
+    }
+
+    .button:hover {
+        background: linear-gradient(to right, #ff0066, #ff6666);
+        cursor: pointer;
+    }
+
+    .buttonBottom {
+        height: 40px;
+        width: 380px;
+        border: none;
+        background-color: #dbdbdb;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .buttonBottom:hover {
+        background: linear-gradient(to right, #ff0066, #ff6666);
+        cursor: pointer;
+    }
+
+    /*Article*/
+    .article {
+        width: 69.8%;
+        height: auto;
+        float: right;
+    }
+
+    /*ChangeInfo*/
+    .changeInfoForm {
+        width: 500px;
+        height: auto;
+        margin-top: 40px;
+        margin-left: 25%;
+        box-shadow: 5px 5px 5px 5px #9b9b9b;
+        border-radius: 5px;
+    }
+
+    .photo {
+        width: 500px;
+        border-bottom: 1px solid #bcbcbc;
+    }
+
+    .imgInfo {
+        margin-left: 30%;
+        margin-top: 10px;
+        border-radius: 10px;
+    }
+
+    .btnPosition {
+        margin-left: 30%;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .btnChangeImage {
+        width: 200px;
+        height: 50px;
+        border-radius: 20px;
+        border: none;
+        background-color:#ff0066;
+        font-weight: bold;
+        font-family: Arial;
+        font-size: 15px;
+    }
+
+    .btnChangeImage:hover {
+        background: linear-gradient(to right, #ff0066, #ff6666);
+        cursor: pointer;
+    }
+
+    /*Input*/
+    .input {
+        margin-top: 15px;
+        clear: both;
+    }
+
+    .textInput {
+        font-family: Arial;
+        font-weight: bold;
+        color: #585858;
+        margin-left: 15px;
+        margin-right: 10px;
+    }
+
+    .inputInfo {
+        width: 300px;
+        height: 30px;
+        border-radius: 5px;
+        border: 1px solid gray;
+    }
+
+    .textArea {
+        border-radius: 5px;
+        border: 1px solid gray;
+        margin-left: 40px;
+    }
+
+    .btnSave {
+        width: 350px;
+        height: 50px;
+        text-align: center;
+        font-family: Arial;
+        font-weight: bold;
+        font-size: 15px;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        background: linear-gradient(to right, #ff0066, #ff6666);
+        margin: 30px;
+    }
+
+    .btnSave:hover {
+        background: linear-gradient(to right, #ff6666, #ff0066);
+        cursor: pointer;
+    }
+</style>

@@ -99,7 +99,7 @@ app.get('/home',async (req,res) =>{
         address: users[0].address,
         age : users[0].age,
         avatar : users[0].avatar,
-        id: users[0].id
+        id: users[0]._id
     });
 })
 app.get('/home/:id',async (req,res) =>{
@@ -135,6 +135,56 @@ app.get('/DeleteUser/:id',async (req,res)=>{
     // });
     res.redirect('/home')
 })
+
+app.get('/UpdateUser/:id',async (req,res)=>{
+    let users =await userConnect.find({}).lean();
+    for(let i = 0 ; i < users.length ; i++){
+        console.log('param : '+req.params.id)
+        if (users[i]._id == req.params.id){
+            res.render('UpdateUser',{
+                email : users[i].email,
+                password : users[i].password,
+                phone : users[i].number_phone,
+                name: users[i].name,
+                address: users[i].address,
+                age : users[i].age,
+                avatar : users[i].avatar,
+                description : users[i].description,
+                id : users[i]._id,
+            });
+            console.log('user : '+users[i])
+            return
+        }
+    }
+})
+
+app.post('/UpdateUser/update',async (req,res)=>{
+    let email = req.body.email;
+    let password = req.body.password;
+    let name = req.body.name
+    let phone = req.body.phone;
+    let address =req.body.address;
+    let age = req.body.age;
+    let description = req.body.description;
+    let idUser = req.body.idUser;
+
+    try {
+        await userConnect.findByIdAndUpdate(idUser, {
+            email : email,
+            password : password,
+            number_phone : phone,
+            name: name,
+            address: address,
+            age : age,
+            description : description,
+        })
+        res.redirect('/home/'+idUser);
+    } catch (e) {
+        res.send('co loi xay ra: ' + e.message)
+    }
+
+})
+
 
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
