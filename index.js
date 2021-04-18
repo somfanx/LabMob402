@@ -1,21 +1,142 @@
 var express = require ('express');
 var expressHbs = require('express-handlebars')
-
+const path = require('path');
 var app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+const uri = "mongodb+srv://admin:admin@cluster0.2vogk.mongodb.net/test?retryWrites=true&w=majority";
+
+const mongoose = require('mongoose');
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    // we're connected!
+    console.log('connected')
+});
+
+var user = mongoose.Schema({
+    email : String,
+    password : String,
+    name : String,
+    address : String,
+    age : String,
+    number_phone : String,
+    avatar : String,
+    description : String,
+})
+const userConnect = db.model('users',user)
+
+//thiet lap handlebars
 app.engine('handlebars', expressHbs({
     layoutsDir: __dirname + '/views/layouts',
     defaultLayout: 'main'
 }));
 app.set('view engine', 'handlebars');
 
+app.use(express.static(path.join(__dirname,'/public/')))
 
 app.get('/', function(req, res){
     res.render('index');
 });
-app.use(express.static('public'));
+app.get('/login', function(req, res){
+    res.render('login');
+});
+app.get('/register', function(req, res){
+    res.render('register');
+});
 
-const port = process.env.PORT || 8080;
+
+app.post('/register1',function (req,res) {
+    var email = req.body.email;
+    var name = req.body.name;
+    var phone = req.body.phone;
+    var password = req.body.password;
+
+    userConnect({
+        email : email,
+        password : password,
+        name : name,
+        address : '',
+        age : '',
+        number_phone : phone,
+        avatar : 'https://pickaface.net/assets/images/not-found.jpg',
+        description : '',
+    }).save(function (err){
+        if(err){
+            res.render('register',{isShow:true,alertMessage:'Dang ky that bai'});
+            console.log('dang ky that bai : '+err)
+            return ;
+        }
+        res.render('register',{isShow:true,alertMessage:'Dang ky thanh cong'});
+        console.log('dang ky thanh cong');
+    })});
+
+// app.post('/login1',async (req,res)=> {
+//
+//     let users =await userConnect.find({}).lean();
+//     console.log(users[0])
+//      res.render('home',{
+//          arr: users,
+//          name: users[0].name,
+//          address: users[0].address,
+//          age : users[0].age,
+//          avatar : users[0].avatar
+//      });
+// })
+
+app.get('/home',async (req,res) =>{
+    let users =await userConnect.find({}).lean();
+    console.log('homepage')
+    console.log(users[0]);
+    res.render('home',{
+        arr: users,
+        name: users[0].name,
+        address: users[0].address,
+        age : users[0].age,
+        avatar : users[0].avatar,
+        id: users[0].id
+    });
+})
+app.get('/home/:id',async (req,res) =>{
+    let users =await userConnect.find({}).lean();
+    for(let i = 0 ; i < users.length ; i++){
+        console.log('param : '+req.params.id)
+        if (users[i]._id == req.params.id){
+            res.render('home',{
+                arr : users,
+                name: users[i].name,
+                address: users[i].address,
+                age : users[i].age,
+                avatar : users[i].avatar,
+                id : users[i]._id,
+            });
+            console.log('id : '+req.params.id)
+            return
+        }
+    }
+})
+
+app.get('/DeleteUser/:id',async (req,res)=>{
+    await userConnect.findByIdAndDelete(req.params.id + '');
+    console.log('xoa id:' + req.params.id);
+    // let users =await userConnect.find({}).lean();
+    // // console.log(users[0])
+    // res.render('home',{
+    //     arr: users,
+    //     name: users[0].name,
+    //     address: users[0].address,
+    //     age : users[0].age,
+    //     avatar : users[0].avatar
+    // });
+    res.redirect('/home')
+})
+
+const port = process.env.PORT || 9191;
 app.listen(port, () => {
     console.log("Way to go server at port " + port);
 });
