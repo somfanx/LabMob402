@@ -18,14 +18,9 @@
 
     <div class="article">
         <div class="changeInfoForm">
-            <div class="photo">
-                <img class="imgInfo" src="{{avatar}}" width="200px" height="200px">
-                <div class="btnPosition">
-                    <button class="btnChangeImage">Đổi ảnh đại diện</button>
-                </div>
-            </div>
 
-            <form class="inputForm" method="post" action="update">
+
+            <form class="inputForm" method="post" action="update" style="padding-top: 30px" enctype="multipart/form-data">
                 <div class="input">
                     <span class="textInput">ID</span>
                     <input name="idUser"type="text" class="inputInfo" style="margin-left: 99px" value="{{id}}" readonly>
@@ -60,7 +55,11 @@
                     <input name="description" type="text" class="inputInfo" placeholder="description" style="margin-left: 39px" value="{{description}}">
 
                 </div>
+                <div class="input">
+                    <span class="textInput">Avatar</span>
+                    <input  name="avatar" style="margin-left: 70px" type="file" required >
 
+                </div>
                 <div style="text-align: center">
                     <button class="btnSave" type="submit">
                         Lưu thông tin
@@ -151,6 +150,7 @@
 
     /*Article*/
     .article {
+
         width: 69.8%;
         height: auto;
         float: right;
@@ -160,7 +160,8 @@
     .changeInfoForm {
         width: 500px;
         height: auto;
-        margin-top: 40px;
+        margin-top: 50px;
+        pading-top:30px;
         margin-left: 25%;
         box-shadow: 5px 5px 5px 5px #9b9b9b;
         border-radius: 5px;

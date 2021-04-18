@@ -1,6 +1,8 @@
 var express = require ('express');
 var expressHbs = require('express-handlebars')
 const path = require('path');
+var multer = require('multer');
+
 var app = express();
 
 const bodyParser = require('body-parser');
@@ -38,7 +40,12 @@ app.engine('handlebars', expressHbs({
 }));
 app.set('view engine', 'handlebars');
 
-app.use(express.static(path.join(__dirname,'/public/')))
+app.use(express.static('public'));
+app.use(express.static('upload'));
+
+app.use('/public', express.static(__dirname + "public"));
+app.use('/upload', express.static(__dirname + "upload"));
+
 
 app.get('/', function(req, res){
     res.render('index');
@@ -93,14 +100,18 @@ app.get('/home',async (req,res) =>{
     let users =await userConnect.find({}).lean();
     console.log('homepage')
     console.log(users[0]);
-    res.render('home',{
-        arr: users,
-        name: users[0].name,
-        address: users[0].address,
-        age : users[0].age,
-        avatar : users[0].avatar,
-        id: users[0]._id
-    });
+    if(users.length > 0){
+        res.render('home',{
+            arr: users,
+            name: users[0].name,
+            address: users[0].address,
+            age : users[0].age,
+            avatar : users[0].avatar,
+            id: users[0]._id
+        });
+        return;
+    }
+    res.render('home');
 })
 app.get('/home/:id',async (req,res) =>{
     let users =await userConnect.find({}).lean();
@@ -157,34 +168,89 @@ app.get('/UpdateUser/:id',async (req,res)=>{
         }
     }
 })
-
-app.post('/UpdateUser/update',async (req,res)=>{
-    let email = req.body.email;
-    let password = req.body.password;
-    let name = req.body.name
-    let phone = req.body.phone;
-    let address =req.body.address;
-    let age = req.body.age;
-    let description = req.body.description;
-    let idUser = req.body.idUser;
-
-    try {
-        await userConnect.findByIdAndUpdate(idUser, {
-            email : email,
-            password : password,
-            number_phone : phone,
-            name: name,
-            address: address,
-            age : age,
-            description : description,
-        })
-        res.redirect('/home/'+idUser);
-    } catch (e) {
-        res.send('co loi xay ra: ' + e.message)
+var tenGoc;
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './upload')
+    },
+    filename: function (req, file, cb) {
+        // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        tenGoc = file.originalname;
+        cb(null, tenGoc);
     }
 
 })
 
+var upload = multer({
+    storage:storage,
+    limits:{
+        fileSize: 2 * 1024 * 1024  // max : 2
+    },
+    fileFilter:function (req,file,cb) {
+        if (file.mimetype == 'image/jpg' || file.mimetype == 'image/png' ||file.mimetype == 'image/jpeg' ){
+            cb(null,true);
+        }else{
+            cb(new Error('Goes wrong on the mimetype'),false);
+        }
+    }
+
+}).single('avatar');
+
+app.post('/UpdateUser/update',async (req,res)=>{
+
+
+
+    upload(req,res, async function (err) {
+        if (err) {
+            return res.send("loi up " +err);
+        }
+        try {
+            let email = req.body.email;
+            let password = req.body.password;
+            let name = req.body.name
+            let phone = req.body.phone;
+            let address =req.body.address;
+            let age = req.body.age;
+            let description = req.body.description;
+            let idUser = req.body.idUser;
+            await userConnect.findByIdAndUpdate(idUser, {
+                email : email,
+                password : password,
+                number_phone : phone,
+                name: name,
+                address: address,
+                age : age,
+                description : description,
+                avatar : tenGoc
+            })
+            res.redirect('/home/'+idUser);
+        } catch (e) {
+            res.send('co loi xay ra: ' + e.message)
+        }
+    })
+
+})
+
+
+
+app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
+     upload(req,res, async function (err) {
+        if (err) {
+            return res.send(err+"");
+        }
+        try {
+            // var anh = 'img/'+tenGoc;
+            await userConnect.findByIdAndUpdate(req.body.id, {
+               // avatar : 'img/'+tenGoc
+               //  avatar : req.file.path
+                avatar : req.file.path.split('\\')[1]
+            })
+            res.redirect('/UpdateAvatar/'+req.body.id);
+        } catch (e) {
+            res.send('co loi xay ra: ' + e.message)
+        }
+    })
+})
 
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
