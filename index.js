@@ -245,7 +245,7 @@ app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
             await userConnect.findByIdAndUpdate(req.body.id, {
                // avatar : 'img/'+tenGoc
                //  avatar : req.file.path
-                avatar : req.file.path.split('\\')[1]
+                avatar : tenGoc
             })
             res.redirect('/UpdateUser/'+req.body.id);
         } catch (e) {
