@@ -168,6 +168,47 @@ app.get('/UpdateUser/:id',async (req,res)=>{
         }
     }
 })
+
+app.post('/UpdateUser/update',async (req,res)=>{
+    let email = req.body.email;
+    let password = req.body.password;
+    let name = req.body.name
+    let phone = req.body.phone;
+    let address =req.body.address;
+    let age = req.body.age;
+    let description = req.body.description;
+    let idUser = req.body.idUser;
+
+    try {
+        await userConnect.findByIdAndUpdate(idUser, {
+            email : email,
+            password : password,
+            number_phone : phone,
+            name: name,
+            address: address,
+            age : age,
+            description : description,
+        })
+        res.redirect('/home/'+idUser);
+    } catch (e) {
+        res.send('co loi xay ra: ' + e.message)
+    }
+
+})
+
+app.get('/UpdateAvatar/:id',async (req,res)=>{
+    let users =await userConnect.find({}).lean();
+    for(let i = 0 ; i < users.length ; i++){
+
+        if (users[i]._id == req.params.id){
+            res.render('UpdateAvatar',{
+                avatar : users[i].avatar,
+                id : users[i]._id,
+            });
+            return
+        }
+    }
+})
 var tenGoc;
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -195,44 +236,6 @@ var upload = multer({
     }
 
 }).single('avatar');
-
-app.post('/UpdateUser/update',async (req,res)=>{
-
-
-
-    upload(req,res, async function (err) {
-        if (err) {
-            return res.send("loi up " +err);
-        }
-        try {
-            let email = req.body.email;
-            let password = req.body.password;
-            let name = req.body.name
-            let phone = req.body.phone;
-            let address =req.body.address;
-            let age = req.body.age;
-            let description = req.body.description;
-            let idUser = req.body.idUser;
-            await userConnect.findByIdAndUpdate(idUser, {
-                email : email,
-                password : password,
-                number_phone : phone,
-                name: name,
-                address: address,
-                age : age,
-                description : description,
-                avatar : tenGoc
-            })
-            res.redirect('/home/'+idUser);
-        } catch (e) {
-            res.send('co loi xay ra: ' + e.message)
-        }
-    })
-
-})
-
-
-
 app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
      upload(req,res, async function (err) {
         if (err) {
@@ -245,14 +248,14 @@ app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
                //  avatar : req.file.path
                 avatar : req.file.path.split('\\')[1]
             })
-            res.redirect('/UpdateAvatar/'+req.body.id);
+            res.redirect('/UpdateUser/'+req.body.id);
         } catch (e) {
             res.send('co loi xay ra: ' + e.message)
         }
     })
 })
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 9191;
 app.listen(port, () => {
     console.log("Way to go server at port " + port);
 });

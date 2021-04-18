@@ -233,7 +233,7 @@
             {{#each arr}}
             <a class="messages" href="/home/{{this._id}}" target="pageHome">
                     <div class="avatar">
-                        <img src="{{this.avatar}}" alt="" />
+                        <img src="../{{this.avatar}}" alt="" />
                     </div>
                     <div class="message">
                         <div class="user">{{this.name}}</div>
@@ -250,7 +250,7 @@
             <div class="user">
                 <img
                         class="user"
-                        src="{{avatar}}"
+                        src="../{{avatar}}"
                         alt=""
                 />
                 <div class="profile">
@@ -274,11 +274,10 @@
             </div>
         </div>
         <div class="edt">
-            <button style="width: 50px;height: 30px;outline: none">
-                <a href="/UpdateUser/{{id}}" style="color: #0b2e13;text-decoration: none;font-size: 20px">edit </a>
-            </button>
-            <button style="width: 70px;height: 30px;outline: none">
-                <a href="/DeleteUser/{{id}}"style="color: #0b2e13;text-decoration: none;font-size: 20px" >delete </a>
+            <button>
+                <a href="/UpdateUser/{{id}}" style="color: #0b2e13" >update </a>            </button>
+            <button>
+                <a href="/DeleteUser/{{id}}" style="color: #0b2e13" >delete </a>
             </button>
         </div>
 
