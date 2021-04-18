@@ -1,6 +1,5 @@
 var express = require ('express');
 var expressHbs = require('express-handlebars')
-const path = require('path');
 var multer = require('multer');
 
 var app = express();
