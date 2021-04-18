@@ -71,7 +71,7 @@ app.post('/register1',function (req,res) {
         address : '',
         age : '',
         number_phone : phone,
-        avatar : 'https://pickaface.net/assets/images/not-found.jpg',
+        avatar : 'not-found.jpg',
         description : '',
     }).save(function (err){
         if(err){
