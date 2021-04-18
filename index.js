@@ -253,6 +253,7 @@ app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
 })
 
 const port = process.env.PORT || 9090;
-app.listen(port, () => {
+//asdsads
+app.listen( process.env.PORT, () => {
     console.log("Way to go server at port " + port);
 });
