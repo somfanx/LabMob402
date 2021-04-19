@@ -40,10 +40,8 @@ app.engine('handlebars', expressHbs({
 app.set('view engine', 'handlebars');
 
 app.use(express.static('public'));
-app.use(express.static('upload'));
 
 app.use('/public', express.static(__dirname + "public"));
-app.use('/upload', express.static(__dirname + "upload"));
 
 
 app.get('/', function(req, res){
@@ -211,7 +209,7 @@ app.get('/UpdateAvatar/:id',async (req,res)=>{
 var tenGoc;
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './upload')
+        cb(null, './public/img')
     },
     filename: function (req, file, cb) {
         // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -253,7 +251,27 @@ app.post('/UpdateAvatar/updateAvt',async (req,res)=>{
         }
     })
 })
+app.get('/getUsers', function (req, res) {
+    var connectUsers = db.model('users', user);
+    var baseJson = {
+        errorCode : undefined,
+        errorMessage : undefined,
+        data : undefined
+    }
 
+    connectUsers.find({},
+        function (error, users) {
+            if(error){
+                baseJson.errorCode = 404;
+                baseJson.errorMessage = error
+            }else{
+                baseJson.errorCode = 200;
+                baseJson.errorMessage = 'OK';
+                baseJson.data = users
+            }
+            res.send(baseJson)
+        })
+});
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
     console.log("Way to go server at port " + port);
