@@ -293,13 +293,38 @@ app.post('/addUser',upload,async (req,res)=> {
         description : description,
     }).save(function (err){
         if(err){
-            res.render('register',{isShow:true,alertMessage:'Dang ky that bai'});
             console.log('dang ky that bai : '+err)
             return ;
         }
-        res.render('register',{isShow:true,alertMessage:'Dang ky thanh cong'});
         console.log('dang ky thanh cong');
     })});
+app.post('/UpdateUser/',upload,async (req,res)=>{
+    let email = req.body.email;
+    let password = req.body.password;
+    let name = req.body.name
+    let phone = req.body.phone;
+    let address =req.body.address;
+    let age = req.body.age;
+    let description = req.body.description;
+    let idUser = req.body.idUser;
+
+    try {
+        await userConnect.findByIdAndUpdate(idUser, {
+            email : email,
+            password : password,
+            number_phone : phone,
+            name: name,
+            address: address,
+            age : age,
+            description : description,
+            avatar:tenGoc,
+        })
+        res.redirect('/home/'+idUser);
+    } catch (e) {
+        res.send('co loi xay ra: ' + e.message)
+    }
+
+})
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
     console.log("Way to go server at port " + port);
