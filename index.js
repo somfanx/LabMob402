@@ -272,6 +272,34 @@ app.get('/getUsers', function (req, res) {
             res.send(baseJson)
         })
 });
+app.post('/addUser',upload,async (req,res)=> {
+    var email = req.body.email;
+    var name = req.body.name;
+    var age = req.body.age
+    var phone = req.body.phone;
+    var password = req.body.password;
+    var address = req.body.address;
+    var description = req.body.description;
+
+
+    userConnect({
+        email : email,
+        password : password,
+        name : name,
+        address : address,
+        age : age,
+        number_phone : phone,
+        avatar : tenGoc,
+        description : description,
+    }).save(function (err){
+        if(err){
+            res.render('register',{isShow:true,alertMessage:'Dang ky that bai'});
+            console.log('dang ky that bai : '+err)
+            return ;
+        }
+        res.render('register',{isShow:true,alertMessage:'Dang ky thanh cong'});
+        console.log('dang ky thanh cong');
+    })});
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
     console.log("Way to go server at port " + port);
