@@ -323,7 +323,11 @@ app.post('/UpdateUser/',upload,async (req,res)=>{
     } catch (e) {
         res.send('co loi xay ra: ' + e.message)
     }
-
+})
+app.get('/DeleteUser',upload,async (req,res)=>{
+    let idUser = req.body.idUser;
+    await userConnect.findByIdAndDelete(idUser + '');
+    console.log('xoa id:' + req.params.id);
 })
 const port = process.env.PORT || 9191;
 app.listen(port, () => {
