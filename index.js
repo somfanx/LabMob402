@@ -324,7 +324,7 @@ app.post('/UpdateUser/',upload,async (req,res)=>{
         res.send('co loi xay ra: ' + e.message)
     }
 })
-app.get('/DeleteUser',upload,async (req,res)=>{
+app.post('/DeleteUser',async (req,res)=>{
     let idUser = req.body.idUser;
     await userConnect.findByIdAndDelete(idUser);
     console.log('xoa id:' + req.params.id);
